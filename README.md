@@ -1,0 +1,1 @@
+## Scripts used for automating the installation process of Argus on Openstack
