@@ -31,3 +31,13 @@ cd ~/cloudbase-init-ci
 # Generate a sample config file for the argus.conf
 oslo-config-generator --config-file etc/argus-config-generator.conf
 # Modify the tempest.conf file
+netid="$(nova network-list | grep public | grep "$2" | awk '{print $2}')"
+router_id="$(neutron router-list | grep router |grep "$2" | awk '{print $2}')"
+crudini --set /etc/tempest/tempest.conf identity uri  "http://10.10.1.3:5000/v2.0/"
+crudini --set /etc/tempest/tempest.conf identity uri_v3 "http://10.10.1.3/identity/v3"
+crudini --set /etc/tempest/tempest.conf auth admin_password "openstack"
+crudini --set /etc/tempest/tempest.conf network default_network "172.18.10.0/24"
+crudini --set /etc/tempest/tempest.conf network public_router_id "$router_id"
+crudini --set /etc/tempest/tempest.conf network public_network_id "$netid"
+crudini --set /etc/tempest/tempest.conf dashboard dashboard_url "http://10.10.1.10/horizon/"
+# Modify the argus.conf file
